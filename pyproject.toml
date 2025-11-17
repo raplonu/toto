@@ -1,0 +1,30 @@
+[project]
+name = "toto"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Julien Bernard", email = "raplonu.jb@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["scikit-build-core>=0.10", "pybind11", "conan"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+# More on that: https://scikit-build-core.readthedocs.io/en/latest/configuration/index.html#minimum-version-defaults
+minimum-version = "build-system.requires"
+
+# Disable the isolated build environment to allow build speedup
+# More on that: https://scikit-build-core.readthedocs.io/en/latest/configuration/index.html#other-options
+build-dir = "build/{wheel_tag}"
+#
+editable.rebuild = true
+
+[tool.scikit-build.cmake]
+define = {CMAKE_PROJECT_TOP_LEVEL_INCLUDES = "cmake/conan_provider.cmake"}
+
+[tool.uv]
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.{h,c,hpp,cpp}" }, { file = "CMakeLists.txt" }]

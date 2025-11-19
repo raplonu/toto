@@ -86,7 +86,7 @@ Then, we can for instance change `compiler.cppstd` value to `gnu20`.
 
 Another file to modify is `$(conan config home)/global.conf`. Some possible addition:
 
-- `tools.cmake.cmaketoolchain:generator="Ninja"`: Will use `ninja` instead of `make`
+- `tools.cmake.cmaketoolchain:generator=Ninja`: Will use `ninja` instead of `make`
 - `tools.build:skip_test=True`: Will no fetch, build and run unit tests by default. Can be overridden using the `-c` flag with conan commands (install, build, etc.)
 - `tools.cmake.cmakedeps:new=will_break_next`: This is needed in order to use `emu`, more on that bellow.
 
@@ -165,6 +165,10 @@ uv pip install .
 This command will build the library and the python wrapper module inside `build/<wheel_tag>` and install it at the venv level.
 
 Note: Be careful, despite build the package in a persistent directory, you cannot reuse the content to perform incremental build. To do so, see the editable section.
+
+#### I did not see conan here !
+
+That is correct, while building or installing the python package, we do not call `conan install` beforehand. The reason is that dependencies are built based on a profile. When calling `conan install`, `conan` will either get the default profile of the user provided one. But when building the C++ module, we want to let `scikit` providing it. That is why we are using `conan_provider.cmake`. This cmake script will deduce the profile based on `cmake` arguments provided by scikit at configure time thus avoiding incompatibility issues.
 
 ## Editable
 
